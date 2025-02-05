@@ -6,26 +6,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using static Ecom.Common;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Ecom.Models
 {
     public class Users
     {
-
         public static async Task<MessageFor> AddUserInfo(UserProfile data)
         {
             try
             {
                 using (SqlConnection sql = new SqlConnection(DBConnection.cs))
                 {
-                    await sql.OpenAsync(); // ✅ Open connection asynchronously
+                    await sql.OpenAsync();  
 
-                    // ✅ Step 1: Check if the email already exists
+                   
                     string checkQuery = "SELECT COUNT(1) FROM Users WITH(NOLOCK) WHERE Email = @Email";
                     using (SqlCommand checkCmd = new SqlCommand(checkQuery, sql))
                     {
                         checkCmd.Parameters.Add(new SqlParameter("@Email", data.Email));
-                        int existingUser = Convert.ToInt32(await checkCmd.ExecuteScalarAsync()); // ✅ Await the async call
+                        int existingUser = Convert.ToInt32(await checkCmd.ExecuteScalarAsync());   
 
                         if (existingUser > 0)
                         {
@@ -37,7 +40,7 @@ namespace Ecom.Models
                         }
                     }
 
-                    // ✅ Step 2: Insert User (if email doesn’t exist)
+                   
                     using (SqlCommand cmd = new SqlCommand("SpAddUserProfile", sql))
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
@@ -47,7 +50,7 @@ namespace Ecom.Models
                         cmd.Parameters.Add(new SqlParameter("@Role", data.Role));
 
 
-                        await cmd.ExecuteNonQueryAsync(); // ✅ Use async call
+                        await cmd.ExecuteNonQueryAsync();  
                     }
 
                     return new MessageFor
@@ -62,7 +65,7 @@ namespace Ecom.Models
                 return new MessageFor
                 {
                     Status = -1,
-                    Message = "Something went wrong." // ✅ Return error message instead of crashing
+                    Message = "Something went wrong." 
                 };
             }
         }
@@ -135,70 +138,60 @@ namespace Ecom.Models
          }
         */
 
-        public static MessageFor Login(UserProfile data)
+        public static MessageFor Login(LoginModel data)
         {
-            // Validate input early if necessary.
-            if (data == null || string.IsNullOrEmpty(data.Email) || string.IsNullOrEmpty(data.Password))
-            {
-                return new MessageFor
-                {
-                    Status = 0,
-                    Message = "Invalid login data provided."
-                };
-            }
+            string token = string.Empty;
 
-            // Use a using statement to ensure the connection is closed properly.
             using (SqlConnection sql = new SqlConnection(DBConnection.cs))
             {
                 using (SqlCommand cmd = new SqlCommand("Login", sql))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-
-                    // Add parameters for email and password.
                     cmd.Parameters.Add(new SqlParameter("@Email", data.Email));
                     cmd.Parameters.Add(new SqlParameter("@Password", DBConnection.encryptP(data.Password)));
 
                     sql.Open();
-
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        // Check if the stored procedure returned any result.
-                        if (reader.Read())
+                        if (reader.Read() && reader["status"] != DBNull.Value && Convert.ToInt32(reader["status"]) == 1)
                         {
-                            // Ensure the status column exists and is valid.
-                            if (reader["status"] != null &&
-                                int.TryParse(reader["status"].ToString(), out int status) &&
-                                status == 1)
-                            {
-                                return new MessageFor
-                                {
-                                    Status = 1,
-                                    Message = "Login Successfully"
-                                };
-                            }
-                            else
-                            {
-                                return new MessageFor
-                                {
-                                    Status = 0,
-                                    Message = "Invalid email or password."
-                                };
-                            }
-                        }
-                        else
-                        {
-                            // No record was returned from the stored procedure.
+                            // Generate JWT Token
+                            token = GenerateJwtToken(data.Email);
+
                             return new MessageFor
                             {
-                                Status = 0,
-                                Message = "Email or password is wrong."
+                                Status = 1,
+                                Message = "Login Successfully",
+                                Token = token,
+
                             };
                         }
                     }
                 }
             }
+
+            return new MessageFor
+            {
+                Status = 0,
+                Message = "Invalid email or password."
+            };
         }
 
+        public static string GenerateJwtToken(string email)
+        {
+            var key = Encoding.ASCII.GetBytes("jOj_J?CZjv$sY?3t^?3f9o0R>G!NmkWnlil"); // Use a secure key!
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, email) }),
+                Expires = DateTime.UtcNow.AddHours(1), // Token valid for 1 hour
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
 
     }
 }
@@ -207,8 +200,17 @@ public class UserProfile
 {
     public int UserID { get; set; }
     public string FullName { get; set; }
+    
     public string Email { get; set; }
     public string Password { get; set; }
     public string Role { get; set; }
     public DateTime CreatedAt { get; set; }
 }
+
+public class LoginModel
+{
+    public string Email { get; set; }
+    public string Password { get; set; }
+    
+}
+

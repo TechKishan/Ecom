@@ -9,6 +9,7 @@ using static Ecom.Common;
 
 namespace Ecom.Controllers
 {
+    [Authorize]
     public class ProductsController : ApiController
     {
         [HttpPost]
@@ -17,7 +18,8 @@ namespace Ecom.Controllers
         {
             return Models.Products.AddProduct(data);
         }
-        [JwtAuthorize]
+
+        [AllowAnonymous]
         [HttpGet]
         [Route("api/Products/GetProduct")]
         public DataTable GetProduct()

@@ -5,9 +5,11 @@ using System.Data;
 using System.Linq;
 using System.Web;
 using static Ecom.Common;
+using System.Web.Http;
 
 namespace Ecom.Models
 {
+ 
     public class Products
     {
         public static MessageFor AddProduct(ProductItem data)
@@ -30,6 +32,7 @@ namespace Ecom.Models
                 Message = "Product added."
             };
         }
+
         public static DataTable GetProduct()
         {
             SqlConnection sql = new SqlConnection(DBConnection.cs);

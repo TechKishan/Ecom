@@ -18,7 +18,7 @@ namespace Ecom.Controllers
         {
             return Models.Users.AddUserInfo(userProfile);
         }
-        [JwtAuthorize]
+        //[JwtAuthorize]
         [HttpGet]
         [Route("api/Users/GetUserInfo")]
         public DataTable GetUserInfo()
@@ -35,7 +35,7 @@ namespace Ecom.Controllers
 
         [HttpPost]
         [Route("api/Users/LogIn")]
-        public MessageFor Login(UserProfile data)
+        public MessageFor Login(LoginModel data)
         {
             return Models.Users.Login(data);
         }
