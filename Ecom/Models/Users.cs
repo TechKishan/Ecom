@@ -138,7 +138,7 @@ namespace Ecom.Models
          }
         */
 
-        public static MessageFor Login(LoginModel data)
+        public static LoginMessageFor Login(UserProfile data)
         {
             string token = string.Empty;
 
@@ -158,7 +158,7 @@ namespace Ecom.Models
                             // Generate JWT Token
                             token = GenerateJwtToken(data.Email);
 
-                            return new MessageFor
+                            return new LoginMessageFor
                             {
                                 Status = 1,
                                 Message = "Login Successfully",
@@ -170,10 +170,11 @@ namespace Ecom.Models
                 }
             }
 
-            return new MessageFor
+            return new LoginMessageFor
             {
                 Status = 0,
-                Message = "Invalid email or password."
+                Message = "Invalid email or password.",
+                Token = null,
             };
         }
 
@@ -207,10 +208,11 @@ public class UserProfile
     public DateTime CreatedAt { get; set; }
 }
 
-public class LoginModel
+public class LoginMessageFor
 {
-    public string Email { get; set; }
-    public string Password { get; set; }
-    
+    public int Status { get; set; }
+    public string Message { get; set; }
+    public string Token { get; set; }
 }
+
 
