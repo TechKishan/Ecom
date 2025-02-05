@@ -118,7 +118,7 @@ namespace Ecom.Models
                         if (reader.Read() && reader["status"] != DBNull.Value && Convert.ToInt32(reader["status"]) == 1)
                         {
                             // Generate JWT Token
-                            token = GenerateJwtToken(data.Email);
+                            token = Startup.GenerateJwtToken(data.Email);
 
                             return new LoginMessageFor
                             {
@@ -140,21 +140,7 @@ namespace Ecom.Models
             };
         }
 
-        public static string GenerateJwtToken(string email)
-        {
-            var key = Encoding.ASCII.GetBytes("jOj_J?CZjv$sY?3t^?3f9o0R>G!NmkWnlil"); // Use a secure key!
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[] { new Claim(ClaimTypes.Name, email) }),
-                Expires = DateTime.UtcNow.AddHours(1), // Token valid for 1 hour
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
+       
 
     }
 }

@@ -373,3 +373,7 @@ appsettings.Development.json
 # Ignore temporary files
 *.user
 *.userosscache
+
+# Ignore sensitive key files
+Startup
+DBConnection
