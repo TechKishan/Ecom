@@ -20,7 +20,7 @@ namespace Ecom
 
         private void ConfigureAuth(IAppBuilder app)
         {
-            var key = System.Text.Encoding.ASCII.GetBytes("jOj_J?CZjv$sY?3t^?3f9o0R>G!NmkWnlil");
+            var key = System.Text.Encoding.ASCII.GetBytes("");
 
             app.UseJwtBearerAuthentication(new Microsoft.Owin.Security.Jwt.JwtBearerAuthenticationOptions
             {
