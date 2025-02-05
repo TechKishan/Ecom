@@ -35,6 +35,7 @@ namespace Ecom.Controllers
             return Models.Users.GetSingleDataUser(data);
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("api/Users/LogIn")]
         public LoginMessageFor Login(UserProfile data)
