@@ -38,7 +38,7 @@ namespace Ecom
         }
         public static string GenerateJwtToken(string email)
         {
-            var key = Encoding.ASCII.GetBytes("jOj_J?CZjv$sY?3t^?3f9o0R>G!NmkWnlil"); // Use a secure key!
+            var key = Encoding.ASCII.GetBytes(""); // Use a secure key!
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var tokenDescriptor = new SecurityTokenDescriptor
