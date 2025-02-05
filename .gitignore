@@ -361,3 +361,15 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore configuration files
+appsettings.json
+appsettings.Development.json
+
+# Ignore temporary files
+*.user
+*.userosscache

@@ -100,44 +100,6 @@ namespace Ecom.Models
             return dt;
         }
 
-        /* public static MessageFor Login(UserProfile data)
-         {
-             SqlConnection sql = new SqlConnection(DBConnection.cs);
-             SqlCommand cmd = new SqlCommand("Login", sql);
-             cmd.CommandType = CommandType.StoredProcedure;
-             cmd.Parameters.Add(new SqlParameter("@Email", data.Email));
-             cmd.Parameters.Add(new SqlParameter("@Password", DBConnection.encryptP(data.Password)));
-             sql.Open();
-             SqlDataReader reader = cmd.ExecuteReader();
-
-             if (reader.Read())
-             {
-                 if (reader["status"] != null && Convert.ToInt32(reader["status"]) == 1)
-                 {
-                     return new MessageFor
-                     {
-                         Status = 1,
-                         Message = "Login Successfully"
-                     };
-                 }
-             }
-             else
-             {
-                 return new MessageFor
-                 {
-                     Status = 0,
-                     Message = "Email or password is wrong."
-                 };
-             }
-             sql.Close();
-             return new MessageFor
-             {
-                 Status = 0,
-                 Message = "Invalid email or password."
-             };
-         }
-        */
-
         public static LoginMessageFor Login(UserProfile data)
         {
             string token = string.Empty;
