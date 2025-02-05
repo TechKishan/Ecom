@@ -22,7 +22,7 @@ namespace Ecom.Models
 
         public static string encryptP(string encryptString)
         {
-            string EncryptionKey = "01234561503ABCDEFGHIJKWMNOPQRSTUVWXYZ";
+            string EncryptionKey = "";
             byte[] clearBytes = Encoding.Unicode.GetBytes(encryptString);
             using (Aes encryptor = Aes.Create())
             {
@@ -46,7 +46,7 @@ namespace Ecom.Models
 
         public static string DecryptP(string cipherText)
         {
-            string EncryptionKey = "01234561503ABCDEFGHIJKWMNOPQRSTUVWXYZ";
+            string EncryptionKey = "";
             cipherText = cipherText.Replace(" ", "+");
             byte[] cipherBytes = Convert.FromBase64String(cipherText);
             using (Aes encryptor = Aes.Create())
