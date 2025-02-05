@@ -10,8 +10,10 @@ using static Ecom.Common;
 
 namespace Ecom.Controllers
 {
+    [Authorize]
     public class UsersController : ApiController
     {
+        [AllowAnonymous]
         [HttpPost]
         [Route("api/Users/AddUserInfo")]
         public Task<MessageFor> AddUserProfile(UserProfile userProfile)
