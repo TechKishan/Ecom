@@ -377,3 +377,4 @@ appsettings.Development.json
 # Ignore sensitive key files
 Startup
 DBConnection
+/Ecom/Ecom.csproj

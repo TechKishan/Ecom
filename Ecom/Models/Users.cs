@@ -11,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+
 namespace Ecom.Models
 {
     public class Users
@@ -148,8 +149,7 @@ namespace Ecom.Models
 public class UserProfile
 {
     public int UserID { get; set; }
-    public string FullName { get; set; }
-    
+    public string FullName { get; set; }   
     public string Email { get; set; }
     public string Password { get; set; }
     public string Role { get; set; }

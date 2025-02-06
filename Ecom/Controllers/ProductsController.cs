@@ -4,12 +4,13 @@ using System.Data;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using static Ecom.Common;
 
 namespace Ecom.Controllers
 {
-    [Authorize]
+    
     public class ProductsController : ApiController
     {
         [HttpPost]
@@ -33,5 +34,12 @@ namespace Ecom.Controllers
         {
             return Models.Products.UpdateProduct(data);
         }
+        [HttpPost]
+        [Route("api/Products/GetProductByID")]
+        public DataTable GetProductByID(ProductItem data)
+        {
+            return Models.Products.GetProductById(data);
+        }
+     
     }
 }

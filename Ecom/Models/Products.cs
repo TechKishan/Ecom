@@ -6,10 +6,11 @@ using System.Linq;
 using System.Web;
 using static Ecom.Common;
 using System.Web.Http;
+using Microsoft.Ajax.Utilities;
 
 namespace Ecom.Models
 {
- 
+
     public class Products
     {
         public static MessageFor AddProduct(ProductItem data)
@@ -62,7 +63,7 @@ namespace Ecom.Models
                 new SqlParameter("@ProductID", data.ProductID),
 
             };
-                DBConnection dB= new DBConnection();
+                DBConnection dB = new DBConnection();
                 int rowaffcted = dB.ExecuteNonQuery("Sp_Products", sql);
                 if (rowaffcted > 0)
                 {
@@ -92,6 +93,53 @@ namespace Ecom.Models
             }
         }
 
+        /* public static List<Dictionary<string, object>> GetProductById(int ProductID)
+         {
+             try
+             {
+                 SqlParameter[] sql = new SqlParameter[] {
+                     new SqlParameter("@Action", "GetProductById"),
+                     new SqlParameter("@ProductID", ProductID),
+                 };
+                 SqlConnection sqls = new SqlConnection(DBConnection.cs);
+                 SqlCommand cmd = new SqlCommand("Sp_Products", sqls);
+                 cmd.CommandType = CommandType.StoredProcedure;
+                 DataTable dt = new DataTable();
+                 SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(cmd);
+                 sqls.Open();
+                 sqlDataAdapter.Fill(dt);
+                 sqls.Close();
+                 List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
+                 return result;
+
+             }
+             catch (Exception ex)
+             {
+                 return null;
+             }
+         }
+        */
+        public static DataTable GetProductById(ProductItem data)
+        {
+            try
+            {
+                SqlConnection sql = new SqlConnection(DBConnection.cs);
+                SqlCommand cmd = new SqlCommand("Sp_Products", sql);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@ProductID", data.ProductID));
+                cmd.Parameters.Add(new SqlParameter("@Action", "GET_BY_ID"));
+                DataTable dt = new DataTable();
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                sql.Open();
+                adapter.Fill(dt);
+                sql.Close();
+                return dt;
+            }
+            catch(Exception ex)
+            {
+                return null;    
+            }
+        }
     }
 }
 
