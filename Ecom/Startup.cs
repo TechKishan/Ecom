@@ -20,7 +20,7 @@ namespace Ecom
 
         private void ConfigureAuth(IAppBuilder app)
         {
-            var key = System.Text.Encoding.ASCII.GetBytes("");
+            var key = System.Text.Encoding.ASCII.GetBytes("ZXqaZtf3wPEthJcFV4FN+>wycU)p(Y!uN>E*?q0!za8ly3%Mks");
 
             app.UseJwtBearerAuthentication(new Microsoft.Owin.Security.Jwt.JwtBearerAuthenticationOptions
             {
@@ -38,7 +38,7 @@ namespace Ecom
         }
         public static string GenerateJwtToken(string email)
         {
-            var key = Encoding.ASCII.GetBytes(""); // Use a secure key!
+            var key = Encoding.ASCII.GetBytes("ZXqaZtf3wPEthJcFV4FN+>wycU)p(Y!uN>E*?q0!za8ly3%Mks"); // Use a secure key!
             var tokenHandler = new JwtSecurityTokenHandler();
 
             var tokenDescriptor = new SecurityTokenDescriptor

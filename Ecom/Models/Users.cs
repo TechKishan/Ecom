@@ -16,62 +16,64 @@ namespace Ecom.Models
 {
     public class Users
     {
-        public static async Task<MessageFor> AddUserInfo(UserProfile data)
-        {
-            try
-            {
-                using (SqlConnection sql = new SqlConnection(DBConnection.cs))
-                {
-                    await sql.OpenAsync();  
-
-                   
-                    string checkQuery = "SELECT COUNT(1) FROM Users WITH(NOLOCK) WHERE Email = @Email";
-                    using (SqlCommand checkCmd = new SqlCommand(checkQuery, sql))
-                    {
-                        checkCmd.Parameters.Add(new SqlParameter("@Email", data.Email));
-                        int existingUser = Convert.ToInt32(await checkCmd.ExecuteScalarAsync());   
-
-                        if (existingUser > 0)
-                        {
-                            return new MessageFor
-                            {
-                                Status = 0,
-                                Message = "Email already registered."
-                            };
-                        }
-                    }
-
-                   
-                    using (SqlCommand cmd = new SqlCommand("SpAddUserProfile", sql))
-                    {
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.Add(new SqlParameter("@Fullname", data.FullName));
-                        cmd.Parameters.Add(new SqlParameter("@Email", data.Email));
-                        cmd.Parameters.Add(new SqlParameter("@Password", DBConnection.encryptP(data.Password)));
-                        cmd.Parameters.Add(new SqlParameter("@Role", data.Role));
+         public static async Task<MessageFor> AddUserInfo(UserProfile data)
+         {
+             try
+             {
+                 using (SqlConnection sql = new SqlConnection(DBConnection.cs))
+                 {
+                     await sql.OpenAsync();  
 
 
-                        await cmd.ExecuteNonQueryAsync();  
-                    }
+                     string checkQuery = "SELECT COUNT(1) FROM Users WITH(NOLOCK) WHERE Email = @Email";
+                     using (SqlCommand checkCmd = new SqlCommand(checkQuery, sql))
+                     {
+                         checkCmd.Parameters.Add(new SqlParameter("@Email", data.Email));
+                         int existingUser = Convert.ToInt32(await checkCmd.ExecuteScalarAsync());   
 
-                    return new MessageFor
-                    {
-                        Status = 1,
-                        Message = "User registered successfully."
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                return new MessageFor
-                {
-                    Status = -1,
-                    Message = "Something went wrong." 
-                };
-            }
-        }
+                         if (existingUser > 0)
+                         {
+                             return new MessageFor
+                             {
+                                 Status = 0,
+                                 Message = "Email already registered."
+                             };
+                         }
+                     }
 
 
+                     using (SqlCommand cmd = new SqlCommand("SpAddUserProfile", sql))
+                     {
+                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                         cmd.Parameters.Add(new SqlParameter("@Fullname", data.FullName));
+                         cmd.Parameters.Add(new SqlParameter("@Email", data.Email));
+                         cmd.Parameters.Add(new SqlParameter("@Password", DBConnection.encryptP(data.Password)));
+                         cmd.Parameters.Add(new SqlParameter("@Role", data.Role));
+
+
+                         await cmd.ExecuteNonQueryAsync();  
+                     }
+
+                     return new MessageFor
+                     {
+                         Status = 1,
+                         Message = "User registered successfully."
+                     };
+                 }
+             }
+             catch (Exception ex)
+             {
+                 return new MessageFor
+                 {
+                     Status = -1,
+                     Message = "Something went wrong." 
+                 };
+             }
+         }
+        
+
+
+     
         public static DataTable GetUserInfo()
         {
             SqlConnection sql = new SqlConnection(DBConnection.cs);
@@ -152,7 +154,7 @@ public class UserProfile
     public string FullName { get; set; }   
     public string Email { get; set; }
     public string Password { get; set; }
-    public string Role { get; set; }
+    public string Role { get; set; }   
     public DateTime CreatedAt { get; set; }
 }
 
