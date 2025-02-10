@@ -38,6 +38,63 @@ namespace Ecom.Models
                 };
             }
         }
+        public static MessageFor OrderUpdate(Order data)
+        {
+            try
+            {
+                SqlConnection sql = new SqlConnection(DBConnection.cs);
+                SqlCommand cmd = new SqlCommand("Sp_Orders", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@Action", "UPDATE"));
+                cmd.Parameters.Add(new SqlParameter("@OrderId", data.OrderId));
+                cmd.Parameters.Add(new SqlParameter("@OrderStatus", data.OrderStatus));
+                cmd.Parameters.Add(new SqlParameter("@PaymentStatus", data.PaymentStatus));
+                sql.Open();
+                cmd.ExecuteNonQuery();
+                sql.Close();
+                return new MessageFor
+                {
+                    Status = 1,
+                    Message = "Order updated Successfully."
+                };
+            }
+            catch (Exception ex)
+            {
+                return new MessageFor
+                {
+                    Status = 0,
+                    Message = "Something went wrong.",
+                };
+            }
+        }
+        public static MessageFor OrderDelete(Order data)
+        {
+            try
+            {
+                SqlConnection sql = new SqlConnection(DBConnection.cs);
+                SqlCommand cmd = new SqlCommand("Sp_Orders", sql);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@Action", "DELETE"));
+                cmd.Parameters.Add(new SqlParameter("@OrderId", data.OrderId));
+        
+                sql.Open();
+                cmd.ExecuteNonQuery();
+                sql.Close();
+                return new MessageFor
+                {
+                    Status = 1,
+                    Message = "Order Delete Successfully."
+                };
+            }
+            catch (Exception ex)
+            {
+                return new MessageFor
+                {
+                    Status = 0,
+                    Message = "Something went wrong.",
+                };
+            }
+        }
     }
 }
 public class Order

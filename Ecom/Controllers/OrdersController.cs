@@ -17,5 +17,19 @@ namespace Ecom.Controllers
         {
             return Models.Orders.OrderInsert(data);
         }
+
+        [HttpPost]
+        [Route("api/Orders/Update")]
+        public MessageFor Update(Order data)
+        {
+            return Models.Orders.OrderUpdate(data);
+        }
+
+        [HttpPost]
+        [Route("api/Orders/Delete")]
+        public MessageFor Delete(Order data)
+        {
+            return Models.Orders.OrderDelete(data);
+        }
     }
 }
