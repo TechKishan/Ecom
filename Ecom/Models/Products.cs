@@ -64,23 +64,13 @@ namespace Ecom.Models
 
             };
                 DBConnection dB = new DBConnection();
-                int rowaffcted = dB.ExecuteNonQuery("Sp_Products", sql);
-                if (rowaffcted > 0)
-                {
+                dB.ExecuteNonQuery("Sp_Products", sql);
+                
                     return new MessageFor()
                     {
                         Status = 1,
                         Message = "Update Successfully"
                     };
-                }
-                else
-                {
-                    return new MessageFor()
-                    {
-                        Status = 1,
-                        Message = "No record were found"
-                    };
-                }
             }
 
             catch (Exception ex)
