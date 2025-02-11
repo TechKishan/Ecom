@@ -258,6 +258,7 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderDetailsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -267,6 +268,7 @@
     </Compile>
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\DBConnection.cs" />
+    <Compile Include="Models\OrderDetails.cs" />
     <Compile Include="Models\Orders.cs" />
     <Compile Include="Models\Products.cs" />
     <Compile Include="Models\Users.cs" />
